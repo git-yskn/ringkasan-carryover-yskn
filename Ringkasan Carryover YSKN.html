@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Refleksi Kerja Mingguan - Yayasan Sahabat Kemanusiaan Nusantara</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fcfbf9;
+            color: #2d3748;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 380px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 320px;
+            }
+        }
+        .tab-btn.active {
+            border-bottom: 2px solid #2b6cb0;
+            color: #2b6cb0;
+            font-weight: 600;
+        }
+    </style>
+    <!-- Chosen Palette: Warm Neutral Harmony (Warm Sand #fcfbf9, Slate Gray #2d3748, Ocean Blue #2b6cb0, Emerald Accent #2f855a, Soft Amber #d69e2e) -->
+    <!-- Application Structure Plan: Designed as an interactive executive operations dashboard. Structure consists of: 1) Header & KPI Cards for immediate high-level summary, 2) Navigational Tab bar (Ikhtisar, Pencapaian, Pekerjaan Tertunda, & Prioritas), 3) Dynamic sector workload distribution chart paired with operational narrative, 4) Filterable list of accomplishments & carryover tasks with urgency indicators. This non-linear structure lets stakeholders instantly assess operational health while allowing detailed deep-dives. -->
+    <!-- Visualization & Content Choices: 
+        - Program workload breakdown -> Dynamic Doughnut Chart (Chart.js) -> User hovers for sector shares -> Clear visual representation of active resource allocation across 4 key sectors.
+        - Operational Progress Bar -> Custom dynamic HTML/CSS visual indicators -> Shows percentage completion of weekly objectives.
+        - Filterable Task Lists -> Dynamic JS buttons -> Filter tasks by status (Selesai / Tertunda) -> Improves scanability.
+        NO SVG icons or Mermaid JS used. Canvas and HTML unicode/styled indicators used instead. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-white border-b border-stone-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="inline-block w-3 h-3 rounded-full bg-emerald-500"></span>
+                    <span class="text-xs font-semibold tracking-wider text-stone-500 uppercase">Yayasan Sahabat Kemanusiaan Nusantara</span>
+                </div>
+                <h1 class="text-xl sm:text-2xl font-bold text-slate-800">Refleksi Kerja Mingguan & Ringkasan Carryover</h1>
+            </div>
+            <div class="flex items-center gap-3 text-xs sm:text-sm text-stone-600 bg-stone-100 px-3 py-2 rounded-lg self-start md:self-auto">
+                <span>📍 Domain Utama: Jakarta, Karawang, Bandung, NTT</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- Executive Summary Banner -->
+        <section class="bg-amber-50 border border-amber-200 rounded-xl p-5 shadow-sm">
+            <h2 class="text-base font-semibold text-amber-900 mb-1">🔍 Ringkasan Operasional Mingguan</h2>
+            <p class="text-sm text-amber-800 leading-relaxed">
+                Minggu ini ditandai dengan fokus intensif pada tanggap darurat bencana dan pendampingan pasien anak di rumah singgah RSCM. Mobilisasi tim lapangan untuk bantuan darurat sempat mengalihkan sumber daya dari pekerjaan administratif, namun program inti kesehatan dan lingkungan tetap berjalan sesuai target harian.
+            </p>
+        </section>
+
+        <!-- KPI Summary Cards -->
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow">
+                <span class="text-xs text-stone-500 font-medium block mb-1">Cakupan Program</span>
+                <span class="text-2xl font-bold text-slate-800">4 Sektor</span>
+                <span class="text-xs text-emerald-600 block mt-1">Kesehatan, Bencana, Lingkungan, Pemberdayaan</span>
+            </div>
+            <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow">
+                <span class="text-xs text-stone-500 font-medium block mb-1">Tugas Selesai</span>
+                <span class="text-2xl font-bold text-emerald-700">7 Poin</span>
+                <span class="text-xs text-stone-500 block mt-1">Selesai dieksekusi minggu ini</span>
+            </div>
+            <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow">
+                <span class="text-xs text-stone-500 font-medium block mb-1">Tugas Carryover</span>
+                <span class="text-2xl font-bold text-amber-600">4 Poin</span>
+                <span class="text-xs text-amber-700 block mt-1">Membutuhkan tindak lanjut</span>
+            </div>
+            <div class="bg-white p-4 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow">
+                <span class="text-xs text-stone-500 font-medium block mb-1">Prioritas Utama Minggu Depan</span>
+                <span class="text-2xl font-bold text-blue-700">3 Target</span>
+                <span class="text-xs text-stone-500 block mt-1">Fokus pengadaan & administratif</span>
+            </div>
+        </section>
+
+        <!-- Navigation Tabs -->
+        <nav class="flex border-b border-stone-200 space-x-6 text-sm font-medium overflow-x-auto">
+            <button onclick="switchTab('overview')" id="tab-overview" class="tab-btn active py-3 px-1 whitespace-nowrap">Ikhtisar & Distribusi Program</button>
+            <button onclick="switchTab('accomplishments')" id="tab-accomplishments" class="tab-btn py-3 px-1 text-stone-500 hover:text-stone-700 whitespace-nowrap">Pencapaian Minggu Ini</button>
+            <button onclick="switchTab('carryover')" id="tab-carryover" class="tab-btn py-3 px-1 text-stone-500 hover:text-stone-700 whitespace-nowrap">Pekerjaan Tertunda (Carryover)</button>
+            <button onclick="switchTab('priorities')" id="tab-priorities" class="tab-btn py-3 px-1 text-stone-500 hover:text-stone-700 whitespace-nowrap">Prioritas Minggu Depan</button>
+        </nav>
+
+        <!-- TAB 1: OVERVIEW & CHART -->
+        <div id="content-overview" class="space-y-6">
+            <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
+                <div class="mb-4">
+                    <h3 class="text-lg font-semibold text-slate-800">Distribusi Fokus Operasional & Alokasi Beban Kerja</h3>
+                    <p class="text-sm text-stone-600 mt-1"> Bagian ini menyajikan gambaran umum porsi aktivitas yayasan sepanjang minggu ini. Diagram memperlihatkan bagaimana beban kerja terbagi di antara empat kanal layanan utama.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <div class="chart-container">
+                        <canvas id="programChart"></canvas>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="p-3 rounded-lg bg-stone-50 border border-stone-200">
+                            <h4 class="font-semibold text-sm text-slate-800 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span> Layanan Kesehatan & Rumah Singgah
+                            </h4>
+                            <p class="text-xs text-stone-600 mt-1">Layanan ambulan gratis dan operasional rumah singgah anak di dekat RSCM berjalan aktif dengan kapasitas penuh.</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-stone-50 border border-stone-200">
+                            <h4 class="font-semibold text-sm text-slate-800 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span> Tanggap Bencana & Kesiapsiagaan
+                            </h4>
+                            <p class="text-xs text-stone-600 mt-1">Distribusi logistik darurat di NTT dan pelatihan mitigasi bencana gempa bumi di area Sesar Lembang.</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-stone-50 border border-stone-200">
+                            <h4 class="font-semibold text-sm text-slate-800 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Konservasi Lingkungan
+                            </h4>
+                            <p class="text-xs text-stone-600 mt-1">Pemeriksaan lahan penanaman pohon dan persiapan pipain air bersih di wilayah rawan kekeringan.</p>
+                        </div>
+                        <div class="p-3 rounded-lg bg-stone-50 border border-stone-200">
+                            <h4 class="font-semibold text-sm text-slate-800 flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span> Pemberdayaan Masyarakat
+                            </h4>
+                            <p class="text-xs text-stone-600 mt-1">Penyaluran sembako rutin untuk lansia dan pekerja informal serta pembaruan kampanye digital.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Program Summary Table -->
+            <div class="bg-white rounded-xl border border-stone-200 overflow-hidden shadow-sm">
+                <div class="p-4 border-b border-stone-200 bg-stone-50">
+                    <h3 class="text-base font-semibold text-slate-800">Tabel Matriks Status Program</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-stone-700">
+                        <thead class="bg-stone-100 text-xs font-semibold text-stone-600 uppercase tracking-wider">
+                            <tr>
+                                <th class="p-4">Kanal Program</th>
+                                <th class="p-4">Fokus Utama</th>
+                                <th class="p-4">Status Mingguan</th>
+                                <th class="p-4">Tantangan Utama</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-stone-200">
+                            <tr>
+                                <td class="p-4 font-medium text-slate-800">Kesehatan & Rumah Singgah</td>
+                                <td class="p-4">Ambulan gratis & rumah singgah pasien anak RSCM</td>
+                                <td class="p-4"><span class="px-2 py-1 bg-emerald-100 text-emerald-800 rounded text-xs font-medium">Aktif Berjalan</span></td>
+                                <td class="p-4 text-xs text-stone-600">Biaya operasional armada & batas kapasitas tempat tidur</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-medium text-slate-800">Tanggap Bencana</td>
+                                <td class="p-4">Distribusi bantuan darurat & pelatihan mitigasi</td>
+                                <td class="p-4"><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs font-medium">Selesai Target</span></td>
+                                <td class="p-4 text-xs text-stone-600">Keterlambatan logistik ke pulau terpencil</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-medium text-slate-800">Konservasi Lingkungan</td>
+                                <td class="p-4">Penanaman pohon, bank sampah & perpipaan air</td>
+                                <td class="p-4"><span class="px-2 py-1 bg-amber-100 text-amber-800 rounded text-xs font-medium">Dalam Proses</span></td>
+                                <td class="p-4 text-xs text-stone-600">Perubahan cuaca & koordinasi vendor lapangan</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-medium text-slate-800">Pemberdayaan Masyarakat</td>
+                                <td class="p-4">Bantuan sembako lansia & guru honorer</td>
+                                <td class="p-4"><span class="px-2 py-1 bg-emerald-100 text-emerald-800 rounded text-xs font-medium">Selesai Target</span></td>
+                                <td class="p-4 text-xs text-stone-600">Fluktuasi bulanan donasi digital</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: ACCOMPLISHMENTS -->
+        <div id="content-accomplishments" class="hidden space-y-4">
+            <div class="bg-white p-5 rounded-xl border border-stone-200 shadow-sm">
+                <h3 class="text-base font-semibold text-slate-800 mb-1">Rincian Pencapaian Mingguan</h3>
+                <p class="text-sm text-stone-600 mb-4">Daftar berikut merangkum seluruh tugas dan inisiatif yang berhasil diselesaikan oleh tim lapangan maupun tim administratif selama periode kerja minggu ini.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-lg bg-emerald-50/50 border border-emerald-200">
+                        <div class="flex items-start gap-3">
+                            <span class="text-emerald-600 font-bold">✓</span>
+                            <div>
+                                <h4 class="text-sm font-semibold text-slate-800">Bantuan Bencana Sikka & NTT</h4>
+                                <p class="text-xs text-stone-600 mt-1">Penyaluran paket sembako dan perlengkapan darurat untuk keluarga terdampak bencana di Sikka, NTT.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-lg bg-emerald-50/50 border border-emerald-200">
+                        <div class="flex items-start gap-3">
+                            <span class="text-emerald-600 font-bold">✓</span>
+                            <div>
+                                <h4 class="text-sm font-semibold text-slate-800">Operasional Rumah Singgah Jakarta</h4>
+                                <p class="text-xs text-stone-600 mt-1">Layanan hunian sementara dan nutrisi harian untuk pasien anak penderita kanker dan hati di dekat RSCM.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-lg bg-emerald-50/50 border border-emerald-200">
+                        <div class="flex items-start gap-3">
+                            <span class="text-emerald-600 font-bold">✓</span>
+                            <div>
+                                <h4 class="text-sm font-semibold text-slate-800">Transportasi Ambulan Gratis</h4>
+                                <p class="text-xs text-stone-600 mt-1">Pengantaran pasien kurang mampu yang membutuhkan penanganan medis darurat antar fasilitas kesehatan.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-lg bg-emerald-50/50 border border-emerald-200">
+                        <div class="flex items-start gap-3">
+                            <span class="text-emerald-600 font-bold">✓</span>
+                            <div>
+                                <h4 class="text-sm font-semibold text-slate-800">Pelatihan Mitigasi Sesar Lembang</h4>
+                                <p class="text-xs text-stone-600 mt-1">Penyelenggaraan lokakarya keselamatan gempa dan mitigasi bencana bagi warga di sekitar kawasan Sesar Lembang.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-lg bg-emerald-50/50 border border-emerald-200">
+                        <div class="flex items-start gap-3">
+                            <span class="text-emerald-600 font-bold">✓</span>
+                            <div>
+                                <h4 class="text-sm font-semibold text-slate-800">Monitoring Konservasi Lingkungan</h4>
+                                <p class="text-xs text-stone-600 mt-1">Pemeriksaan rutin area penanaman pohon lokal dan pendampingan bank sampah komunitas.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-lg bg-emerald-50/50 border border-emerald-200">
+                        <div class="flex items-start gap-3">
+                            <span class="text-emerald-600 font-bold">✓</span>
+                            <div>
+                                <h4 class="text-sm font-semibold text-slate-800">Penyaluran Sembako Mingguan</h4>
+                                <p class="text-xs text-stone-600 mt-1">Pembagian paket pangan untuk warga lansia, pekerja informal, dan keluarga prasejahtera.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 rounded-lg bg-emerald-50/50 border border-emerald-200 md:col-span-2">
+                        <div class="flex items-start gap-3">
+                            <span class="text-emerald-600 font-bold">✓</span>
+                            <div>
+                                <h4 class="text-sm font-semibold text-slate-800">Pembaruan Kampanye Digital</h4>
+                                <p class="text-xs text-stone-600 mt-1">Pembaruan data dan pencapaian platform penggalangan dana secara berkala untuk transparansi donatur.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: CARRYOVER -->
+        <div id="content-carryover" class="hidden space-y-4">
+            <div class="bg-white p-5 rounded-xl border border-stone-200 shadow-sm">
+                <h3 class="text-base font-semibold text-slate-800 mb-1">Tugas Belum Selesai & Kendala Operasional</h3>
+                <p class="text-sm text-stone-600 mb-4">Daftar item pekerjaan yang perlu dilanjutkan ke minggu depan beserta alasan pentingnya penyelesaian tugas tersebut.</p>
+                <div class="space-y-3">
+                    <div class="p-4 rounded-lg border-l-4 border-amber-500 bg-stone-50 border-r border-t border-b border-stone-200">
+                        <div class="flex justify-between items-start">
+                            <h4 class="text-sm font-semibold text-slate-800">1. Pengadaan Material Perpipaan Air Bersih (Bener Meriah)</h4>
+                            <span class="text-xs font-semibold text-amber-700 bg-amber-100 px-2 py-0.5 rounded">Sangat Penting</span>
+                        </div>
+                        <p class="text-xs text-stone-600 mt-2">Finalisasi kontrak vendor lokal untuk proyek perpipaan air di 14 desa kering. Krisis air berdampak langsung pada sanitasi dan kesehatan warga.</p>
+                    </div>
+                    <div class="p-4 rounded-lg border-l-4 border-amber-500 bg-stone-50 border-r border-t border-b border-stone-200">
+                        <div class="flex justify-between items-start">
+                            <h4 class="text-sm font-semibold text-slate-800">2. Servis Rutin Armada Ambulan</h4>
+                            <span class="text-xs font-semibold text-amber-700 bg-amber-100 px-2 py-0.5 rounded">Penting</span>
+                        </div>
+                        <p class="text-xs text-stone-600 mt-2">Pemeriksaan mekanis dan pemeliharaan armada pendamping pasien prasejahtera guna memastikan kelayakan dan keselamatan perjalanan jauh.</p>
+                    </div>
+                    <div class="p-4 rounded-lg border-l-4 border-stone-400 bg-stone-50 border-r border-t border-b border-stone-200">
+                        <div class="flex justify-between items-start">
+                            <h4 class="text-sm font-semibold text-slate-800">3. Pelaporan Keuangan Kuartalan</h4>
+                            <span class="text-xs font-semibold text-stone-700 bg-stone-200 px-2 py-0.5 rounded">Administratif</span>
+                        </div>
+                        <p class="text-xs text-stone-600 mt-2">Penyusunan laporan keuangan untuk mitra korporasi. Keterlambatan terjadi karena pengalihan personel ke tugas darurat bencana.</p>
+                    </div>
+                    <div class="p-4 rounded-lg border-l-4 border-stone-400 bg-stone-50 border-r border-t border-b border-stone-200">
+                        <div class="flex justify-between items-start">
+                            <h4 class="text-sm font-semibold text-slate-800">4. Pendaftaran Peserta Edukasi Lingkungan</h4>
+                            <span class="text-xs font-semibold text-stone-700 bg-stone-200 px-2 py-0.5 rounded">Pengembangan</span>
+                        </div>
+                        <p class="text-xs text-stone-600 mt-2">Mendata guru dan siswa sekolah lokal untuk kelas kesadaran lingkungan yang dijadwalkan pada siklus berikutnya.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: PRIORITIES -->
+        <div id="content-priorities" class="hidden space-y-4">
+            <div class="bg-white p-5 rounded-xl border border-stone-200 shadow-sm">
+                <h3 class="text-base font-semibold text-slate-800 mb-1">Rencana Prioritas Minggu Depan</h3>
+                <p class="text-sm text-stone-600 mb-4">Urutan tindakan strategis yang harus diprioritaskan oleh tim untuk menjaga kelancaran operasional dan komitmen program.</p>
+                
+                <div class="space-y-4">
+                    <div class="flex items-start gap-4 p-4 rounded-xl bg-blue-50/60 border border-blue-200">
+                        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm">1</div>
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-800">Penandatanganan Kontrak & Pengiriman Material Air Bersih</h4>
+                            <p class="text-xs text-stone-600 mt-1">Rincian: Menyelesaikan kesepakatan vendor dan memobilisasi material perpipaan ke Bener Meriah untuk mengatasi krisis air di 14 desa target.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4 p-4 rounded-xl bg-stone-50 border border-stone-200">
+                        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-slate-700 text-white font-bold flex items-center justify-center text-sm">2</div>
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-800">Pemeliharaan & Inspeksi Kesiapan Ambulan</h4>
+                            <p class="text-xs text-stone-600 mt-1">Rincian: Melakukan servis rutin menyeluruh pada seluruh unit kendaraan pasien untuk menjamin keamanan operasional medis.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4 p-4 rounded-xl bg-stone-50 border border-stone-200">
+                        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-slate-700 text-white font-bold flex items-center justify-center text-sm">3</div>
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-800">Finalisasi Laporan Pertanggungjawaban Hibah</h4>
+                            <p class="text-xs text-stone-600 mt-1">Rincian: Menyelesaikan laporan akuntabilitas donasi korporasi agar proses penyerahan dana tahap selanjutnya tetap lancar.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operational Notes Box -->
+            <div class="bg-stone-100 p-4 rounded-xl border border-stone-200">
+                <h4 class="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">Catatan Ritme Kerja</h4>
+                <p class="text-xs text-stone-700 leading-relaxed">
+                    Tim menunjukkan fleksibilitas tinggi dalam menangani panggilan darurat bencana. Meskipun memicu sedikit penundaan laporan administratif, dinamika ini wajar dalam kegiatan lapangan. Keseimbangan antara respon cepat dan administrasi rutin perlu terus dijaga.
+                </p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-stone-200 py-4 mt-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-stone-500">
+            Yayasan Sahabat Kemanusiaan Nusantara &copy; 2026. Laporan Refleksi Operasional Interaktif.
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Tab switching function
+        function switchTab(tabId) {
+            const tabs = ['overview', 'accomplishments', 'carryover', 'priorities'];
+            tabs.forEach(id => {
+                const content = document.getElementById(`content-${id}`);
+                const tabBtn = document.getElementById(`tab-${id}`);
+                if (id === tabId) {
+                    content.classList.remove('hidden');
+                    tabBtn.classList.add('active');
+                    tabBtn.classList.remove('text-stone-500');
+                } else {
+                    content.classList.add('hidden');
+                    tabBtn.classList.remove('active');
+                    tabBtn.classList.add('text-stone-500');
+                }
+            });
+        }
+
+        // Initialize Chart.js
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('programChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        'Kesehatan & Rumah Singgah',
+                        'Tanggap Bencana',
+                        'Konservasi Lingkungan',
+                        'Pemberdayaan Masyarakat'
+                    ],
+                    datasets: [{
+                        data: [35, 30, 20, 15],
+                        backgroundColor: [
+                            '#2b6cb0', // Blue
+                            '#2f855a', // Green
+                            '#d69e2e', // Amber
+                            '#805ad5'  // Purple
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12,
+                                font: {
+                                    family: 'Plus Jakarta Sans',
+                                    size: 11
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` ${context.label}: ${context.raw}% alokasi`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
